@@ -23,10 +23,53 @@ export type Book = {
   title: Scalars['String']['output'];
 };
 
+export type InputCreateBook = {
+  title: Scalars['String']['input'];
+};
+
+export type InputLogin = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type InputRegister = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type Message = {
+  __typename?: 'Message';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createBook: Book;
+  register: UserWithoutPassword;
+};
+
+
+export type MutationCreateBookArgs = {
+  infos: InputCreateBook;
+};
+
+
+export type MutationRegisterArgs = {
+  infos: InputRegister;
+};
+
 export type Query = {
   __typename?: 'Query';
   books: Array<Book>;
+  login: Message;
+  logout: Message;
   users: Array<User>;
+};
+
+
+export type QueryLoginArgs = {
+  infos: InputLogin;
 };
 
 export type User = {
@@ -36,12 +79,148 @@ export type User = {
   password: Scalars['String']['output'];
 };
 
+export type UserWithoutPassword = {
+  __typename?: 'UserWithoutPassword';
+  email: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
+export type RegisterMutationVariables = Exact<{
+  infos: InputRegister;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserWithoutPassword', id: string, email: string } };
+
+export type CreateBookMutationVariables = Exact<{
+  infos: InputCreateBook;
+}>;
+
+
+export type CreateBookMutation = { __typename?: 'Mutation', createBook: { __typename?: 'Book', title: string, id: string } };
+
+export type LoginQueryVariables = Exact<{
+  infos: InputLogin;
+}>;
+
+
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'Message', success: boolean, message: string } };
+
 export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BooksQuery = { __typename?: 'Query', books: Array<{ __typename?: 'Book', title: string, id: string }> };
 
 
+export const RegisterDocument = gql`
+    mutation Register($infos: InputRegister!) {
+  register(infos: $infos) {
+    id
+    email
+  }
+}
+    `;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      infos: // value for 'infos'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
+      }
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CreateBookDocument = gql`
+    mutation CreateBook($infos: InputCreateBook!) {
+  createBook(infos: $infos) {
+    title
+    id
+  }
+}
+    `;
+export type CreateBookMutationFn = Apollo.MutationFunction<CreateBookMutation, CreateBookMutationVariables>;
+
+/**
+ * __useCreateBookMutation__
+ *
+ * To run a mutation, you first call `useCreateBookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBookMutation, { data, loading, error }] = useCreateBookMutation({
+ *   variables: {
+ *      infos: // value for 'infos'
+ *   },
+ * });
+ */
+export function useCreateBookMutation(baseOptions?: Apollo.MutationHookOptions<CreateBookMutation, CreateBookMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBookMutation, CreateBookMutationVariables>(CreateBookDocument, options);
+      }
+export type CreateBookMutationHookResult = ReturnType<typeof useCreateBookMutation>;
+export type CreateBookMutationResult = Apollo.MutationResult<CreateBookMutation>;
+export type CreateBookMutationOptions = Apollo.BaseMutationOptions<CreateBookMutation, CreateBookMutationVariables>;
+export const LoginDocument = gql`
+    query Login($infos: InputLogin!) {
+  login(infos: $infos) {
+    success
+    message
+  }
+}
+    `;
+
+/**
+ * __useLoginQuery__
+ *
+ * To run a query within a React component, call `useLoginQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLoginQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLoginQuery({
+ *   variables: {
+ *      infos: // value for 'infos'
+ *   },
+ * });
+ */
+export function useLoginQuery(baseOptions: Apollo.QueryHookOptions<LoginQuery, LoginQueryVariables> & ({ variables: LoginQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+      }
+export function useLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LoginQuery, LoginQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+        }
+export function useLoginSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<LoginQuery, LoginQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+        }
+export type LoginQueryHookResult = ReturnType<typeof useLoginQuery>;
+export type LoginLazyQueryHookResult = ReturnType<typeof useLoginLazyQuery>;
+export type LoginSuspenseQueryHookResult = ReturnType<typeof useLoginSuspenseQuery>;
+export type LoginQueryResult = Apollo.QueryResult<LoginQuery, LoginQueryVariables>;
 export const BooksDocument = gql`
     query Books {
   books {
